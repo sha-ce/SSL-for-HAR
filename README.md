@@ -1,3 +1,5 @@
+# Self-Supervised Learning for Human Activity Recognition using Transformer
+
 ## Requirements
 If you would like to develop the model for your own use, you need to follow the instructions below.
 ### Installation
@@ -27,3 +29,6 @@ python3 downstream.py
 Please change the configuration in `conf/config_eva.py` as needed.
 ### Results
 after the above code is executed, the result is output to `experiment_log/downstream/`.
+
+## References
+[Multi-task self-supervised learning for wearables](https://github.com/OxWearables/ssl-wearables)
