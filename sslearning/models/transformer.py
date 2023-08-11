@@ -170,14 +170,14 @@ class PatchEmbed(nn.Module):
     def forward(self, x, y=None):
         B, C, W = x.shape
         if not self.is_eva:
-            x, mask = self.data_trans(x)
+            x, mask = self.data_transform(x, y)
             x = self.proj(x).flatten(2).transpose(1, 2)
             return x, mask
         else:
             x = self.proj(x).flatten(2).transpose(1, 2)
             return x, None
     
-    def data_trans(self, x, y=None):
+    def data_transform(self, x, y=None):
         delta = self.patch_size
         
         d = x.device.type+':'+str(x.device.index)
@@ -217,7 +217,7 @@ class PatchEmbed(nn.Module):
         
         tensor_patches = [torch.from_numpy(p) for p in patches]
         patches_cat = torch.cat(tensor_patches, axis=1).permute(0,2,1).float()
-        return patches_cat.to(d), mask.to(d)
+        return patches_cat.to(d), mask.to(d) if self.task.mask else None
 
 
 
@@ -326,9 +326,9 @@ class Transformer(nn.Module):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
     
-    def prepare_tokens(self, x):
+    def prepare_tokens(self, x, y=None):
         B, nc, w = x.shape
-        x, mask = self.patch_embed(x)
+        x, mask = self.patch_embed(x, y)
         
         cls_tokens = self.cls_token.expand(B, -1, -1)
         x = torch.cat((cls_tokens, x), dim=1)
@@ -337,8 +337,8 @@ class Transformer(nn.Module):
         
         return self.pos_drop(x), mask
     
-    def forward(self, x):
-        x, mask = self.prepare_tokens(x)
+    def forward(self, x, y=None):
+        x, mask = self.prepare_tokens(x, y)
         
         # attention
         for blk in self.blocks:
