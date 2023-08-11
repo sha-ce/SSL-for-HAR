@@ -31,4 +31,5 @@ Please change the configuration in `conf/config_eva.py` as needed.
 after the above code is executed, the result is output to `experiment_log/downstream/`.
 
 ## References
-[Multi-task self-supervised learning for wearables](https://github.com/OxWearables/ssl-wearables)
+- [Multi-task self-supervised learning for wearables](https://github.com/OxWearables/ssl-wearables)
+- [time series augmentation by UchidaLab](https://github.com/uchidalab/time_series_augmentation/blob/master/utils/augmentation.py)
